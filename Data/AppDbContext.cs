@@ -3,6 +3,7 @@ using TP5_Servicios_API_REST.Models;
 
 namespace TP5_Servicios_API_REST.Data
 {
+    // Asegurate de agregar ": DbContext" acá
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -21,12 +22,10 @@ namespace TP5_Servicios_API_REST.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Indice único para el Email de Usuario
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            // Configuración de borrado en cascada o restringido según necesidad
             modelBuilder.Entity<Ingreso>()
                 .HasOne(i => i.Usuario)
                 .WithMany(u => u.Ingresos)
