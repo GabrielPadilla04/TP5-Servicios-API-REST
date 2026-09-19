@@ -17,7 +17,7 @@ namespace TP5_Servicios_API_REST.Data
         public DbSet<IngresoDetalle> IngresoDetalles { get; set; }
         public DbSet<Salida> Salidas { get; set; }
         public DbSet<SalidaDetalle> SalidaDetalles { get; set; }
-
+        public DbSet<Transaccion> Transacciones { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
