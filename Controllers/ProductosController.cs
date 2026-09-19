@@ -1,0 +1,181 @@
+using API.DTOs.Input;
+using API.DTOs.Output;
+using API.Excepciones;
+using API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+
+namespace API.Controllers
+{
+	[Route("api/[controller]")]
+	[ApiController]
+	[Authorize]
+	public class ProductosController : ControllerBase
+	{
+		private readonly ProductoService _productoService;
+		private readonly ImagenService _imagenService;
+
+		public ProductosController(ProductoService productoService, ImagenService imagenService)
+		{
+			_productoService = productoService;
+			_imagenService = imagenService;
+		}
+
+		[HttpPost("{id}/imagen")]
+		[Authorize(Roles = "Administrador")]
+		public async Task<ActionResult<ProductoImagenResponse>> SubirImagen(int id, IFormFile archivo)
+		{
+			try
+			{
+				Imagen imagen = await _imagenService.SubirImagen(id, archivo);
+
+				string baseUrl = $"{Request.Scheme}://{Request.Host}";
+				ProductoImagenResponse dto = new ProductoImagenResponse(
+					imagen.Id,
+					imagen.NombreOriginal,
+					$"{baseUrl}/{imagen.RutaRelativa}",
+					imagen.TipoContenido,
+					imagen.TamanoBytes,
+					imagen.FechaCreacion);
+
+				return CreatedAtAction(nameof(ObtenerPorId), new { id }, dto);
+			}
+			catch (RecursoNoExisteException e)
+			{
+				return NotFound(e.Message);
+			}
+			catch (DatosLlegaronErradosException e)
+			{
+				return BadRequest(e.Message);
+			}
+			catch (BaseDeDatosException e)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+			}
+		}
+
+		[HttpGet]
+		// Lógica de paginado 
+		public async Task<ActionResult<List<ProductoListadoResponse>>> ObtenerTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+		{
+			try
+			{
+				return Ok(await _productoService.ObtenerTodos(page, pageSize));
+			}
+			catch (BaseDeDatosException e)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+			}
+		}
+
+		[HttpGet("{id}")]
+		public async Task<ActionResult<ProductoResponse>> ObtenerPorId(int id)
+		{
+			try
+			{
+				Producto producto = await _productoService.ObtenerPorId(id);
+
+				string? imagenUrl = producto.Imagen is null
+					? null
+					: $"{Request.Scheme}://{Request.Host}/{producto.Imagen.RutaRelativa}";
+
+				ProductoImagenResponse? imagenDto = producto.Imagen is null
+					? null
+					: new ProductoImagenResponse(
+						producto.Imagen.Id,
+						producto.Imagen.NombreOriginal,
+						imagenUrl!,
+						producto.Imagen.TipoContenido,
+						producto.Imagen.TamanoBytes,
+						producto.Imagen.FechaCreacion);
+
+				ProductoResponse dto = new ProductoResponse(
+					producto.Id,
+					producto.Nombre,
+					producto.PrecioCompra,
+					producto.PrecioVenta,
+					producto.Stock,
+					producto.CategoriaId,
+					producto.Categoria?.Nombre,
+					imagenDto);
+
+				return Ok(dto);
+			}
+			catch (RecursoNoExisteException e)
+			{
+				return NotFound(e.Message);
+			}
+			catch (BaseDeDatosException e)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+			}
+		}
+
+		[HttpPost]
+		[Authorize(Roles = "Administrador")]
+		public async Task<ActionResult<ProductoListadoResponse>> Crear(CrearProductoRequest dto)
+		{
+			try
+			{
+				ProductoListadoResponse producto = await _productoService.Crear(dto);
+				return CreatedAtAction(nameof(ObtenerPorId), new { id = producto.Id }, producto);
+			}
+			catch (DatosLlegaronErradosException e)
+			{
+				return BadRequest(e.Message);
+			}
+			catch (RecursoExistenteException e)
+			{
+				return Conflict(e.Message);
+			}
+			catch (BaseDeDatosException e)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+			}
+		}
+
+		[HttpPut("{id}")]
+		[Authorize(Roles = "Administrador")]
+		public async Task<IActionResult> Actualizar(int id, ActualizarProductoRequest dto)
+		{
+			try
+			{
+				await _productoService.Actualizar(id, dto);
+				return NoContent();
+			}
+			catch (DatosLlegaronErradosException e)
+			{
+				return BadRequest(e.Message);
+			}
+			catch (RecursoNoExisteException e)
+			{
+				return NotFound(e.Message);
+			}
+			catch (BaseDeDatosException e)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+			}
+		}
+
+		[HttpDelete("{id}")]
+		[Authorize(Roles = "Administrador")]
+		public async Task<IActionResult> Eliminar(int id)
+		{
+			try
+			{
+				await _productoService.Eliminar(id);
+				return NoContent();
+			}
+			catch (RecursoNoExisteException e)
+			{
+				return NotFound(e.Message);
+			}
+			catch (BaseDeDatosException e)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+			}
+		}
+	}
+}
