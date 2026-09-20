@@ -112,6 +112,10 @@ namespace API.Controllers
                 await _categoriaService.Eliminar(id);
                 return NoContent();
             }
+            catch (DatosLlegaronErradosException e)
+            {
+                return BadRequest(e.Message);
+            }
             catch (RecursoNoExisteException e)
             {
                 return NotFound(e.Message);

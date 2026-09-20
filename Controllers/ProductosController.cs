@@ -168,7 +168,11 @@ namespace API.Controllers
 				await _productoService.Eliminar(id);
 				return NoContent();
 			}
-			catch (RecursoNoExisteException e)
+            catch (DatosLlegaronErradosException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (RecursoNoExisteException e)
 			{
 				return NotFound(e.Message);
 			}

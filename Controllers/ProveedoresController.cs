@@ -115,6 +115,10 @@ namespace API.Controllers
             {
                 return NotFound(e.Message);
             }
+            catch (DatosLlegaronErradosException e)
+            {
+                return BadRequest(e.Message);
+            }
             catch (BaseDeDatosException e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
