@@ -1,4 +1,4 @@
-namespace TP5-Servicios-API-REST.DTOs.Proveedor.Response
+namespace TP5_Servicios_API_REST.DTOs.Proveedor.Response
 {
     public class ProveedorResponse
     {

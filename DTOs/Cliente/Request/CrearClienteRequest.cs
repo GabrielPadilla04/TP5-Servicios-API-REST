@@ -1,4 +1,4 @@
-namespace TP5-Servicios-API-REST.DTOs.Cliente.Request
+namespace TP5_Servicios_API_REST.DTOs.Cliente.Request
 {
     public class CrearClienteRequest
     {
