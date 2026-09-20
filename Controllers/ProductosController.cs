@@ -1,13 +1,13 @@
-using API.DTOs.Input;
-using API.DTOs.Output;
-using API.Excepciones;
-using API.Interfaces;
+using TP5_Servicios_API_REST.DTOs.Usuario.Input;
+using TP5_Servicios_API_REST.DTOs.Usuario.Output;
+using TP5_Servicios_API_REST.Excepciones;
+using TP5_Servicios_API_REST.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace API.Controllers
+namespace TP5_Servicios_API_REST.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]

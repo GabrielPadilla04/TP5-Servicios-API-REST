@@ -1,4 +1,4 @@
-namespace TP5-Servicios-API-REST.DTOs.Producto.Request
+namespace TP5_Servicios_API_REST.DTOs.Producto.Request
 {
     public class ActualizarProductoRequest
     {

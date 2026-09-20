@@ -1,4 +1,4 @@
-using API.DTOs.Input;
+using TP5_Servicios_API_REST.DTOs.Usuario.Input;
 using API.DTOs.Output;
 using API.Excepciones;
 using API.Interfaces; 

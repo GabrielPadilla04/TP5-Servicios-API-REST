@@ -1,4 +1,4 @@
-namespace TP5-Servicios-API-REST.DTOs.Producto.Response
+namespace TP5_Servicios_API_REST.DTOs.Producto.Response
 {
     // DTO Liviano para el listado (ObtenerTodos)
     public class ProductoListadoResponse
