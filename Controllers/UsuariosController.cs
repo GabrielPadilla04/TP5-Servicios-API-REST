@@ -1,23 +1,24 @@
-using API.DTOs.Input;
-using API.DTOs.Output;
-using API.Excepciones;
-using API.Interfaces; 
+using TP5_Servicios_API_REST.DTOs.Usuario.Input;
+using TP5_Servicios_API_REST.DTOs.Usuario.Output;
+using TP5_Servicios_API_REST.Excepciones;
+using TP5_Servicios_API_REST.Services;
+using TP5_Servicios_API_REST.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace TP5-Servicios-API-REST.Controllers
+namespace TP5_Servicios_API_REST.Controllers
 {
     [Route("api/usuarios")]
     [ApiController]
     [Authorize]
     public class UsuariosController : ControllerBase
     {
-        private readonly IUsuarioService _usuarioService;
+        private readonly UsuarioService _usuarioService;
 
-        public UsuariosController(IUsuarioService usuarioService)
+        public UsuariosController(UsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
         }

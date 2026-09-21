@@ -1,11 +1,11 @@
-using TP5-Servicios-API-REST.Data;
-using TP5-Servicios-API-REST.Excepciones;
-using TP5-Servicios-API-REST.Models;
+using TP5_Servicios_API_REST.Data;
+using TP5_Servicios_API_REST.Excepciones;
+using TP5_Servicios_API_REST.Models;
 using Microsoft.EntityFrameworkCore;
-using TP5-Servicios-API-REST.DTOs.Cliente.Request;
-using TP5-Servicios-API-REST.DTOs.Cliente.Response;
+using TP5_Servicios_API_REST.DTOs.Cliente.Request;
+using TP5_Servicios_API_REST.DTOs.Cliente.Response;
 
-namespace API.Services
+namespace TP5_Servicios_API_REST.Services
 {
     public class ClienteService
     {

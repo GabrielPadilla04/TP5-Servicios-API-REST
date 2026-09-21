@@ -1,4 +1,4 @@
-namespace TP5-Servicios-API-REST.DTOs.Usuario.Output
+namespace TP5_Servicios_API_REST.DTOs.Usuario.Output
 {
     // DTO Específico que se suele devolver al actualizar o al hacer login (sin la fecha de creación)
     public class UsuarioAuthDtoOutput
