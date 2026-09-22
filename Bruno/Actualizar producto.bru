@@ -1,0 +1,31 @@
+meta {
+  name: Actualizar producto
+  type: http
+  seq: 11
+}
+
+put {
+  url: https://localhost:7235/api/Productos/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwic3ViIjoiMSIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTc5MDA0NjQ1OSwiZXhwIjoxNzkwMDc1MjU5LCJpYXQiOjE3OTAwNDY0NTksImlzcyI6IlRQNUFwaSIsImF1ZCI6IlRQNUNsaWVudHMifQ.bMVmjIy9uUWDAJe_E4Z9JZz1UatzOy4ltPQhPmQ4_gg
+}
+
+body:json {
+  {
+    "nombre": "Cepillo de Banco No. 4 Profesional",
+    "descripcion": "Cepillo manual para carpintería reforzado",
+    "precio": 28000,
+    "categoriaId": 1,
+    "imagenUrl": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

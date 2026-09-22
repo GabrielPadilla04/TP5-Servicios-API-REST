@@ -1,0 +1,17 @@
+meta {
+  name: Eliminar Producto
+  type: http
+  seq: 12
+}
+
+delete {
+  url: https://localhost:7235/api/Productos/2
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Crear cliente
+  type: http
+  seq: 14
+}
+
+post {
+  url: https://localhost:7235/api/Clientes
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwic3ViIjoiMSIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTc5MDA0NjQ1OSwiZXhwIjoxNzkwMDc1MjU5LCJpYXQiOjE3OTAwNDY0NTksImlzcyI6IlRQNUFwaSIsImF1ZCI6IlRQNUNsaWVudHMifQ.bMVmjIy9uUWDAJe_E4Z9JZz1UatzOy4ltPQhPmQ4_gg
+}
+
+body:json {
+  {
+    "nombre": "Juan Pérez",
+    "email": "juan.perez@email.com",
+    "telefono": "2954123456",
+    "direccion": "Av. San Martín 450"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}
