@@ -242,6 +242,6 @@ TP5-Servicios-API-REST/
 
 ## 👨‍💻 Equipo de Desarrollo
 <p align="center">
-Gabriel Padilla
-Valentín
+Gabriel Padilla -
+Valentín Montes
 </p>
