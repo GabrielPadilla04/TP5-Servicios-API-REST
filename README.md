@@ -1,19 +1,4 @@
-```markdown
-# 🚀 TP5 — Servicios API REST
-
-<p align="center">
-  <strong>API REST desarrollada con ASP.NET Core 10, Entity Framework Core y MySQL</strong>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 10">
-  <img src="https://img.shields.io/badge/ASP.NET%20Core-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="ASP.NET Core">
-  <img src="https://img.shields.io/badge/MySQL-8-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
-  <img src="https://img.shields.io/badge/Entity%20Framework%20Core-ORM-512BD4?style=for-the-badge" alt="Entity Framework Core">
-  <img src="https://img.shields.io/badge/JWT-Authentication-black?style=for-the-badge" alt="JWT">
-  <img src="https://img.shields.io/badge/Scalar-API%20Reference-FF1351?style=for-the-badge" alt="Scalar">
-</p>
-
+🚀 TP5 — Servicios API REST
 ---
 
 ## 📋 Descripción
@@ -65,9 +50,8 @@ La base de datos utiliza una estructura relacional, gestionada mediante `AppDbCo
 
 ### 📐 Diagrama Entidad-Relación
 
-<p align="center">
-  <img src="./docs/der.png" alt="Diagrama Entidad-Relación" width="900">
-</p>
+<img width="1178" height="582" alt="image" src="https://github.com/user-attachments/assets/cdda54a0-d822-4427-851a-c2d019b783bd" />
+
 
 ---
 
