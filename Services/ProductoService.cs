@@ -3,7 +3,7 @@ using TP5_Servicios_API_REST.Excepciones;
 using TP5_Servicios_API_REST.Models;
 using Microsoft.EntityFrameworkCore;
 using TP5_Servicios_API_REST.DTOs.Producto.Request;
-using TP5_Servicios_API_REST.DTOs.Producto.Response; 
+using TP5_Servicios_API_REST.DTOs.Producto.Response;
 
 namespace TP5_Servicios_API_REST.Services
 {
@@ -20,7 +20,7 @@ namespace TP5_Servicios_API_REST.Services
         {
             try
             {
-                    return await _context.Productos
+                return await _context.Productos
                     .Include(p => p.Categoria)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
@@ -92,17 +92,16 @@ namespace TP5_Servicios_API_REST.Services
                     Nombre = dto.Nombre,
                     Descripcion = dto.Descripcion,
                     Precio = dto.Precio,
-                    //el stock inicial es 0 y se aumenta con un Ingreso, pero depende de DTO
                     Stock = dto.Stock,
                     CategoriaId = dto.CategoriaId,
-                    ImagenUrl = dto.ImagenUrl // Si la imagen se sube después, esto puede venir nulo
+                    ImagenUrl = dto.ImagenUrl
                 };
 
                 _context.Productos.Add(nuevoProducto);
                 await _context.SaveChangesAsync();
 
                 // Para devolver el nombre de la categoría, la cargamos
-                await _context.Entry(nuevoProducto).Reference(p => p.Categoria).LoadAsync();
+                await _context.Entry(nuevoProducto).Reference(p => p.Categoria!).LoadAsync();
 
                 return new ProductoListadoResponse(
                     nuevoProducto.Id,
@@ -114,6 +113,12 @@ namespace TP5_Servicios_API_REST.Services
             }
             catch (RecursoExistenteException) { throw; }
             catch (RecursoNoExisteException) { throw; }
+            catch (DbUpdateException ex)
+            {
+                // Atrapa el error exacto de MySQL y lo expone en la respuesta HTTP
+                string mensajeInner = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                throw new BaseDeDatosException($"Error exacto de MySQL: {mensajeInner}");
+            }
             catch (Exception ex)
             {
                 throw new BaseDeDatosException($"Error al crear el producto: {ex.Message}");
@@ -131,7 +136,6 @@ namespace TP5_Servicios_API_REST.Services
                     throw new RecursoNoExisteException($"No se encontró el producto con ID {id}.");
                 }
 
-                // Validar que la nueva categoría exista (si es que la cambió)
                 if (producto.CategoriaId != dto.CategoriaId)
                 {
                     bool categoriaExiste = await _context.Categorias.AnyAsync(c => c.Id == dto.CategoriaId);
@@ -145,7 +149,7 @@ namespace TP5_Servicios_API_REST.Services
                 producto.Descripcion = dto.Descripcion;
                 producto.Precio = dto.Precio;
                 producto.CategoriaId = dto.CategoriaId;
-                // Si la imagen viene en el DTO, la actualizamos
+
                 if (!string.IsNullOrEmpty(dto.ImagenUrl))
                 {
                     producto.ImagenUrl = dto.ImagenUrl;
@@ -155,6 +159,11 @@ namespace TP5_Servicios_API_REST.Services
                 await _context.SaveChangesAsync();
             }
             catch (RecursoNoExisteException) { throw; }
+            catch (DbUpdateException ex)
+            {
+                string mensajeInner = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                throw new BaseDeDatosException($"Error exacto de MySQL: {mensajeInner}");
+            }
             catch (Exception ex)
             {
                 throw new BaseDeDatosException($"Error al actualizar el producto: {ex.Message}");
@@ -165,7 +174,6 @@ namespace TP5_Servicios_API_REST.Services
         {
             try
             {
-                //Traemos el producto con su historial de compras y ventas
                 var producto = await _context.Productos
                     .Include(p => p.IngresoDetalles)
                     .Include(p => p.SalidaDetalles)
@@ -176,7 +184,6 @@ namespace TP5_Servicios_API_REST.Services
                     throw new RecursoNoExisteException($"No se encontró el producto con ID {id}.");
                 }
 
-                //Si el producto ya se compró o se vendió, no se puede borrar
                 if (producto.IngresoDetalles != null && producto.IngresoDetalles.Any())
                 {
                     throw new DatosLlegaronErradosException($"No se puede eliminar el producto '{producto.Nombre}' porque ya tiene ingresos (compras) registrados.");
@@ -191,7 +198,12 @@ namespace TP5_Servicios_API_REST.Services
                 await _context.SaveChangesAsync();
             }
             catch (RecursoNoExisteException) { throw; }
-            catch (DatosLlegaronErradosException) { throw; } // Atrapamos las validaciones de movimientos
+            catch (DatosLlegaronErradosException) { throw; }
+            catch (DbUpdateException ex)
+            {
+                string mensajeInner = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                throw new BaseDeDatosException($"Error exacto de MySQL: {mensajeInner}");
+            }
             catch (Exception ex)
             {
                 throw new BaseDeDatosException($"Error al eliminar el producto: {ex.Message}");

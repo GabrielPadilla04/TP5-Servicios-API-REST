@@ -29,7 +29,9 @@ public class SalidasController : ControllerBase
 
         try
         {
-            var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                                 ?? User.FindFirst("sub")?.Value;
+
             if (string.IsNullOrEmpty(usuarioIdClaim))
                 return Unauthorized("Token no válido.");
 
@@ -40,7 +42,8 @@ public class SalidasController : ControllerBase
                 ClienteId = dto.ClienteId,
                 UsuarioId = usuarioId,
                 Fecha = DateTime.UtcNow,
-                Total = 0
+                Total = 0,
+                Detalles = new List<SalidaDetalle>()
             };
 
             decimal totalSalida = 0;
@@ -54,20 +57,21 @@ public class SalidasController : ControllerBase
                     return NotFound($"El producto con ID {item.ProductoId} no existe.");
                 }
 
-                // Control estricto de stock suficiente
+                // Control estricto de stock
                 if (producto.Stock < item.Cantidad)
                 {
                     await transaction.RollbackAsync();
                     return BadRequest($"Stock insuficiente para '{producto.Nombre}'. Disponible: {producto.Stock}, Solicitado: {item.Cantidad}.");
                 }
 
-                // Descontar el stock del producto
+                // Descontamos stock
                 producto.Stock -= item.Cantidad;
 
                 var subtotal = item.Cantidad * item.PrecioVenta;
                 totalSalida += subtotal;
 
-                salida.SalidaDetalles.Add(new SalidaDetalle
+                // Corregido: Usar .Detalles
+                salida.Detalles.Add(new SalidaDetalle
                 {
                     ProductoId = item.ProductoId,
                     Cantidad = item.Cantidad,

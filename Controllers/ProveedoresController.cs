@@ -1,10 +1,10 @@
-using API.Excepciones;
-using API.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TP5Programacion.Compartidas.DTO.Proveedor.Request;
-using TP5Programacion.Compartidas.DTO.Proveedor.Response;
+using TP5_Servicios_API_REST.DTOs.Proveedor.Request;
+using TP5_Servicios_API_REST.DTOs.Proveedor.Response;
+using TP5_Servicios_API_REST.Excepciones;
+using TP5_Servicios_API_REST.Models;
+using TP5_Servicios_API_REST.Services;
 
 namespace API.Controllers
 {

@@ -23,22 +23,19 @@ namespace TP5_Servicios_API_REST.Controllers
             _usuarioService = usuarioService;
         }
 
-      
+        // ----------------------------------------------------
         // ENDPOINTS DE USUARIO COMÚN
-        
+        // ----------------------------------------------------
 
         [HttpGet]
-        [Authorize(Roles = "Administrador")] 
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult<List<UsuarioDtoOutput>>> ObtenerTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var resultado = await _usuarioService.ObtenerlosATodos(page, pageSize);
-
-                // Retornamos el total de registros en los headers para el paginado
-                Response.Headers.Append("X-Total-Registros", resultado.TotalRegistros.ToString());
-
-                return Ok(resultado.Usuarios);
+                // UsuarioService.ObtenerlosATodos devuelve List<UsuarioDtoOutput> directamente
+                List<UsuarioDtoOutput> usuarios = await _usuarioService.ObtenerlosATodos(page, pageSize);
+                return Ok(usuarios);
             }
             catch (BaseDeDatosException e)
             {
@@ -51,7 +48,8 @@ namespace TP5_Servicios_API_REST.Controllers
         {
             try
             {
-                string? idClaimUsuario = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+                string? idClaimUsuario = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                                     ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
                 if (!int.TryParse(idClaimUsuario, out int id))
                 {
@@ -80,7 +78,8 @@ namespace TP5_Servicios_API_REST.Controllers
         {
             try
             {
-                string? idClaimUsuario = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+                string? idClaimUsuario = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                                     ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
                 if (!int.TryParse(idClaimUsuario, out int id))
                 {
@@ -108,9 +107,9 @@ namespace TP5_Servicios_API_REST.Controllers
             }
         }
 
-        
+        // ----------------------------------------------------
         // ENDPOINTS DE ADMINISTRADOR
-        
+        // ----------------------------------------------------
 
         [HttpPost("convertirenadministrador/{id:int}")]
         [Authorize(Roles = "Administrador")]

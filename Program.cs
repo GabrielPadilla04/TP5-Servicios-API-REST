@@ -2,18 +2,20 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 using TP5_Servicios_API_REST.Data;
+using TP5_Servicios_API_REST.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Configuración de la base de datos (MySQL con Pomelo)
+// 1. Base de datos (MySQL con Pomelo)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// 2. Configuración de Autenticación con Token JWT
+// 2. Autenticación JWT
 var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "ClaveSecretaSuperSeguraTP5_2026!");
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "ClaveSecretaSuperSeguraTP5_2026!ConSuficienteLongitud12345");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -36,7 +38,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// 3. Configuración de CORS en formato permisivo
+// 3. CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Permisivo", policy =>
@@ -47,24 +49,30 @@ builder.Services.AddCors(options =>
     });
 });
 
-// 4. Servicios de Controladores y OpenAPI / Swagger
+// 4. Inyección de Dependencias
+builder.Services.AddScoped<CategoriaService>();
+builder.Services.AddScoped<ClienteService>();
+builder.Services.AddScoped<ProductoService>();
+builder.Services.AddScoped<ProveedorService>();
+builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<ImagenService>();
+
+// 5. Controladores y OpenAPI NATIVO de .NET 10
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// 5. Pipeline de solicitudes HTTP
+// 6. Pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(); // Interfaz visual moderna e inmune a errores de Swashbuckle
 }
 
 app.UseHttpsRedirection();
-
-// Habilitar CORS
+app.UseStaticFiles();
 app.UseCors("Permisivo");
-
-// Habilitar Autenticación y Autorización
 app.UseAuthentication();
 app.UseAuthorization();
 

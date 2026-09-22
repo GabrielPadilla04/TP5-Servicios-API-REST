@@ -59,21 +59,25 @@ namespace TP5_Servicios_API_REST.Controllers
         private string GenerarJwtToken(Usuario usuario)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
-            var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+
+            // Valor de respaldo si no encuentra la clave en appsettings.json
+            string secretKey = jwtSettings["Key"] ?? "ClaveSecretaSuperSeguraTP5_2026!ConSuficienteLongitud12345";
+            var key = Encoding.UTF8.GetBytes(secretKey);
 
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
-                new Claim(ClaimTypes.Role, usuario.Rol)
+                new Claim(ClaimTypes.Role, usuario.Rol ?? "Usuario")
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddHours(2),
-                Issuer = jwtSettings["Issuer"],
-                Audience = jwtSettings["Audience"],
+                Expires = DateTime.UtcNow.AddHours(8),
+                Issuer = jwtSettings["Issuer"] ?? "TP5Api",
+                Audience = jwtSettings["Audience"] ?? "TP5Clients",
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
