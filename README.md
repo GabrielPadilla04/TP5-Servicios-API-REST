@@ -1,113 +1,99 @@
-🚀 TP5 — Servicios API REST
-<p align="center"> <strong>API REST desarrollada con ASP.NET Core 10, Entity Framework Core y MySQL</strong> </p> <p align="center"> <img src="https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 10"> <img src="https://img.shields.io/badge/ASP.NET%20Core-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="ASP.NET Core"> <img src="https://img.shields.io/badge/MySQL-8-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"> <img src="https://img.shields.io/badge/Entity%20Framework%20Core-ORM-512BD4?style=for-the-badge" alt="Entity Framework Core"> <img src="https://img.shields.io/badge/JWT-Authentication-black?style=for-the-badge" alt="JWT"> </p>
-📋 Descripción
+```markdown
+# 🚀 TP5 — Servicios API REST
 
-Este proyecto consiste en una API REST desarrollada con ASP.NET Core 10, utilizando Entity Framework Core como ORM y MySQL como sistema de gestión de base de datos.
+<p align="center">
+  <strong>API REST desarrollada con ASP.NET Core 10, Entity Framework Core y MySQL</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 10">
+  <img src="https://img.shields.io/badge/ASP.NET%20Core-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="ASP.NET Core">
+  <img src="https://img.shields.io/badge/MySQL-8-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/Entity%20Framework%20Core-ORM-512BD4?style=for-the-badge" alt="Entity Framework Core">
+  <img src="https://img.shields.io/badge/JWT-Authentication-black?style=for-the-badge" alt="JWT">
+  <img src="https://img.shields.io/badge/Scalar-API%20Reference-FF1351?style=for-the-badge" alt="Scalar">
+</p>
+
+---
+
+## 📋 Descripción
+
+Este proyecto consiste en una API REST desarrollada con ASP.NET Core 10, utilizando Entity Framework Core como ORM y MySQL como sistema de gestión de base de datos[cite: 1].
 
 El sistema permite administrar:
-
-📦 Productos e inventario
-
-🏷️ Categorías
-
-👥 Clientes
-
-🚚 Proveedores
-
-🔐 Usuarios y autenticación
-
-🛒 Compras
-
-💰 Ventas
-
-🖼️ Imágenes de productos
-
-📊 Movimientos y transacciones
+- 📦 **Productos e inventario**
+- 🏷️ **Categorías**
+- 👥 **Clientes**
+- 🚚 **Proveedores**
+- 🔐 **Usuarios y autenticación**
+- 🛒 **Compras**
+- 💰 **Ventas**
+- 🖼️ **Imágenes de productos**
+- 📊 **Movimientos y transacciones**
 
 Además, las operaciones de compras y ventas tienen impacto transaccional directo sobre el stock, permitiendo mantener actualizado el inventario.
 
-🛠️ Tecnologías utilizadas
-Tecnología	Uso
-🟣 ASP.NET Core 10	Desarrollo de la API REST
-🟣 Entity Framework Core	ORM y acceso a datos
-🔵 MySQL	Base de datos relacional
-🔐 JWT	Autenticación y autorización
-📖 Swagger / OpenAPI	Documentación de la API
-🧪 Bruno	Pruebas de endpoints
-🗄️ Arquitectura y modelo de datos
+---
 
-La base de datos utiliza una estructura relacional, gestionada mediante AppDbContext y Entity Framework Core.
+## 🛠️ Tecnologías Utilizadas
 
-🔑 Entidades principales
-👤 Usuarios
+| Tecnología | Uso |
+| :--- | :--- |
+| 🟣 **ASP.NET Core 10** | Desarrollo de la API REST[cite: 1] |
+| 🟣 **Entity Framework Core** | ORM y acceso a datos[cite: 1] |
+| 🔵 **MySQL** | Base de datos relacional[cite: 1] |
+| 🔐 **JWT** | Autenticación y autorización[cite: 1] |
+| 📖 **Scalar / OpenAPI** | Documentación interactiva de la API |
+| 🧪 **Bruno** | Pruebas de endpoints (`.bru`)[cite: 1, 4] |
 
-Gestiona:
+---
 
-Autenticación
+## 🗄️ Arquitectura y Modelo de Datos
 
-Roles
+La base de datos utiliza una estructura relacional, gestionada mediante `AppDbContext` y Entity Framework Core.
 
-Contraseñas almacenadas mediante hash
+### 🔑 Entidades Principales
 
-📦 Productos y categorías
+* 👤 **Usuarios:** Gestión de autenticación, roles y contraseñas almacenadas mediante hash.
+* 📦 **Productos y Categorías:** Administración del catálogo de productos y asociación con sus respectivas categorías e imágenes. Las imágenes se almacenan físicamente en `wwwroot/uploads/`.
+* 👥 **Clientes y Proveedores:** Entidades involucradas en las diferentes operaciones comerciales del sistema.
+* 📥 **Ingresos y 📤 Salidas:** 
+  * **Ingresos:** Compras realizadas a proveedores.
+  * **Salidas:** Ventas realizadas a clientes.
+  * *Ambas operaciones actualizan el stock de los productos involucrados de forma atómica.*
+* 📊 **Transacciones:** Registro y control de movimientos e historial de auditoría sobre el inventario.
 
-Permite administrar el catálogo de productos y asociarlos con sus respectivas categorías e imágenes.
+### 📐 Diagrama Entidad-Relación
 
-Las imágenes se almacenan en:
+<p align="center">
+  <img src="./docs/der.png" alt="Diagrama Entidad-Relación" width="900">
+</p>
 
-wwwroot/uploads/
+---
 
-👥 Clientes y proveedores
+## ⚙️ Instalación y Configuración
 
-Representan las entidades involucradas en las diferentes operaciones comerciales del sistema.
+### 1️⃣ Prerrequisitos
 
-📥 Ingresos y 📤 salidas
+Antes de ejecutar el proyecto, necesitas tener instalado:
+* [.NET 10 SDK](https://dotnet.microsoft.com/)
+* Servidor **MySQL** (vía MySQL Server, XAMPP o Docker)
+* [Bruno](https://www.usebruno.com/) *(opcional, para ejecutar la colección de pruebas)*
 
-Las operaciones comerciales se dividen en:
+### 2️⃣ Clonar el Repositorio
 
-Ingresos: representan compras realizadas a proveedores.
-
-Salidas: representan ventas realizadas a clientes.
-
-Ambas operaciones actualizan el stock de los productos involucrados.
-
-📊 Transacciones
-
-Permiten registrar y controlar los movimientos realizados sobre el inventario.
-
-📐 Diagrama Entidad-Relación
-<p align="center"> <img src="./docs/der.png" alt="Diagrama Entidad-Relación" width="900"> </p>
-⚙️ Instalación y configuración
-1️⃣ Prerrequisitos
-
-Antes de ejecutar el proyecto, necesitás tener instalado:
-
-.NET 10 SDK
-
-MySQL Server
-
-XAMPP o Docker, en caso de utilizar alguno de ellos
-
-Bruno
- — opcional, para ejecutar las pruebas
-
-2️⃣ Clonar el repositorio
-git clone https://github.com/GabrielPadilla04/TP5-Servicios-API-REST.git
-
+```bash
+git clone [https://github.com/GabrielPadilla04/TP5-Servicios-API-REST.git](https://github.com/GabrielPadilla04/TP5-Servicios-API-REST.git)
 cd TP5-Servicios-API-REST
-
 git checkout Gabirama
 
-3️⃣ Configurar la base de datos
+```
 
-Abrí el archivo:
+### 3️⃣ Configurar la Base de Datos
 
-appsettings.json
+Abre el archivo `appsettings.json` y configura la conexión a tu servidor MySQL:
 
-
-y configurá la conexión a tu servidor MySQL.
-
-🔗 Connection String
+```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Port=3306;Database=tp5_servicios_db;User=root;Password=tu_contraseña;"
@@ -119,131 +105,115 @@ y configurá la conexión a tu servidor MySQL.
   }
 }
 
+```
 
-⚠️ Importante: No compartas claves reales ni secretos JWT en repositorios públicos.
+> ⚠️ **Importante:** No compartas claves reales ni secretos JWT en repositorios públicos.
 
-🗃️ Crear la base de datos
+### 4️⃣ Crear la Base de Datos
 
-Una vez configurada la conexión, ejecutá las migraciones de Entity Framework Core:
+Una vez configurada la conexión, ejecuta las migraciones de Entity Framework Core:
 
+```bash
 dotnet ef database update
 
+```
 
-Esto creará las tablas y relaciones necesarias en la base de datos configurada.
+*Si no tienes instalada la herramienta global de EF Core:*
 
-Si no tenés instalado dotnet-ef:
-
+```bash
 dotnet tool install --global dotnet-ef
 
-▶️ Ejecutar la API
+```
+
+### 5️⃣ Ejecutar la API
 
 Para iniciar el servidor de desarrollo:
 
+```bash
 dotnet run
 
+```
 
 La API estará disponible en:
 
-🔒 HTTPS
-https://localhost:7001
+* 🔒 **HTTPS:** `https://localhost:7235`
+* 🌐 **HTTP:** `http://localhost:5235`
 
-🌐 HTTP
-http://localhost:5001
+---
 
-📖 Swagger
+## 📖 Documentación Interactiva (Scalar)
 
-Una vez iniciada la aplicación, podés acceder a la documentación interactiva mediante:
+Una vez iniciada la aplicación, puedes acceder a la documentación interactiva y probar los endpoints mediante **Scalar API Reference**:
 
-<p align="center">
-🔗 https://localhost:7001/swagger
-</p>
+Scalar permite visualizar, explorar y probar directamente los diferentes endpoints disponibles en la API de forma moderna e interactiva.
 
-Swagger permite visualizar y probar directamente los diferentes endpoints disponibles en la API.
+---
 
-🧪 Pruebas con Bruno
+## 🧪 Pruebas con Bruno
 
-El proyecto incluye una colección de pruebas preparada para Bruno API Client mediante archivos .bru.
+El proyecto incluye la colección de pruebas preparada para **Bruno API Client** (`.bru`).
 
-📂 Abrir la colección
+### 📂 Abrir la colección
 
-Abrí Bruno.
+1. Abre **Bruno**.
+2. Selecciona **Open Collection**.
+3. Elige la carpeta del proyecto.
+4. Ejecuta las peticiones disponibles.
 
-Seleccioná Open Collection.
+### 🔐 1. Autenticación
 
-Elegí la carpeta correspondiente al proyecto.
+Ejecuta la petición para generar el JWT Bearer Token:
 
-Ejecutá las peticiones disponibles.
-
-🔐 1. Autenticación
-
-Primero ejecutá:
-
+```http
 POST /api/Auth/login
 
+```
 
-Esta petición genera un JWT Bearer Token.
+Copia el token obtenido e inclúyelo en las cabeceras de autorización para acceder a los endpoints protegidos:
 
-Luego utilizá el token obtenido para acceder a los endpoints protegidos.
-
-Authorization
+```http
 Authorization: Bearer <TOKEN>
 
-📚 2. Catálogos
+```
 
-Podés probar las operaciones CRUD de:
+### 📚 2. Catálogos
 
-/api/Categorias
-/api/Productos
-/api/Clientes
-/api/Proveedores
+Puedes probar las operaciones CRUD de:
 
-🖼️ 3. Carga de imágenes
+* `/api/Categorias`
+* `/api/Productos`
+* `/api/Clientes`
+* `/api/Proveedores`
 
-La creación de productos con imagen utiliza:
+### 🖼️ 3. Carga de Imágenes
 
-multipart/form-data
+La creación de productos con imagen utiliza `multipart/form-data`. Las imágenes se almacenan automáticamente en la ruta física:
 
-
-Las imágenes se almacenan en:
-
+```text
 wwwroot/uploads/
 
-🔄 Operaciones transaccionales
+```
 
-Una de las funcionalidades principales del sistema es el manejo automático del stock.
+### 🔄 4. Operaciones Transaccionales
 
-🛒 Compra
-POST /api/Ingresos
+Una de las funcionalidades principales del sistema es el manejo automático e incremental del stock:
 
+```text
+🛒 COMPRA (POST /api/Ingresos)
+Proveedor ──► Ingreso ──► Detalle Ingreso ──► 📦 STOCK ↑
 
-Una compra genera un ingreso de stock.
+💰 VENTA (POST /api/Salidas)
+Cliente ──► Salida ──► Detalle Salida ──► 📦 STOCK ↓
 
-Proveedor
-    ↓
-Ingreso
-    ↓
-Detalle del ingreso
-    ↓
-📦 STOCK ↑
+```
 
-💰 Venta
-POST /api/Salidas
+⚡ *Las operaciones de inventario se realizan de manera transaccional, manteniendo sincronizados los movimientos y el stock.*
 
+---
 
-Una venta genera un egreso de stock.
+## 📁 Estructura del Proyecto
 
-Cliente
-    ↓
-Salida
-    ↓
-Detalle de la salida
-    ↓
-📦 STOCK ↓
-
-
-⚡ Las operaciones de inventario se realizan de manera transaccional, manteniendo sincronizados los movimientos y el stock.
-
-📁 Estructura del proyecto
+```text
 TP5-Servicios-API-REST/
 │
 ├── 📁 Controllers/
@@ -261,25 +231,33 @@ TP5-Servicios-API-REST/
 ├── 📄 Program.cs
 └── 📄 README.md
 
-✨ Funcionalidades principales
-Funcionalidad	Estado
-🔐 Autenticación JWT	✅
-👤 Gestión de usuarios	✅
-📦 Gestión de productos	✅
-🏷️ Gestión de categorías	✅
-👥 Gestión de clientes	✅
-🚚 Gestión de proveedores	✅
-🖼️ Carga de imágenes	✅
-🛒 Registro de compras	✅
-💰 Registro de ventas	✅
-📊 Actualización automática de stock	✅
-📖 Swagger	✅
-🧪 Colección Bruno	✅
-🗃️ Entity Framework Core	✅
-🐬 MySQL	✅
-👨‍💻 Equipo de desarrollo
+```
+
+---
+
+## ✨ Funcionalidades Principales
+
+| Funcionalidad | Estado |
+| --- | --- |
+| 🔐 Autenticación JWT | ✅ |
+| 👤 Gestión de Usuarios | ✅ |
+| 📦 Gestión de Productos | ✅ |
+| 🏷️ Gestión de Categorías | ✅ |
+| 👥 Gestión de Clientes | ✅ |
+| 🚚 Gestión de Proveedores | ✅ |
+| 🖼️ Carga de Imágenes (`wwwroot/uploads`) | ✅ |
+| 🛒 Registro de Compras (Ingresos) | ✅ |
+| 💰 Registro de Ventas (Salidas) | ✅ |
+| 📊 Actualización automática de stock | ✅ |
+| 📖 Documentación con Scalar | ✅ |
+| 🧪 Colección de pruebas en Bruno (`.bru`) | ✅ |
+| 🗃️ Entity Framework Core | ✅ |
+| 🐬 MySQL | ✅ |
+
+---
+
+## 👨‍💻 Equipo de Desarrollo
 <p align="center">
 Gabriel Padilla
 Valentín
 </p>
-<p align="center"> <strong>TP5 — Servicios API REST</strong><br> ASP.NET Core 10 · Entity Framework Core · MySQL </p>
