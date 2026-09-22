@@ -29,7 +29,9 @@ public class IngresosController : ControllerBase
 
         try
         {
-            var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                                 ?? User.FindFirst("sub")?.Value;
+
             if (string.IsNullOrEmpty(usuarioIdClaim))
                 return Unauthorized("Token no válido.");
 
@@ -40,7 +42,8 @@ public class IngresosController : ControllerBase
                 ProveedorId = dto.ProveedorId,
                 UsuarioId = usuarioId,
                 Fecha = DateTime.UtcNow,
-                Total = 0
+                Total = 0,
+                Detalles = new List<IngresoDetalle>()
             };
 
             decimal totalIngreso = 0;
@@ -54,13 +57,14 @@ public class IngresosController : ControllerBase
                     return NotFound($"El producto con ID {item.ProductoId} no existe.");
                 }
 
-                // Aumentar/Incrementar stock del producto
+                // Incrementamos stock
                 producto.Stock += item.Cantidad;
 
                 var subtotal = item.Cantidad * item.PrecioCosto;
                 totalIngreso += subtotal;
 
-                ingreso.IngresoDetalles.Add(new IngresoDetalle
+                // Corregido: Usar .Detalles
+                ingreso.Detalles.Add(new IngresoDetalle
                 {
                     ProductoId = item.ProductoId,
                     Cantidad = item.Cantidad,

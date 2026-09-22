@@ -23,10 +23,14 @@ namespace TP5_Servicios_API_REST.Models
 
         // Clave Foránea
         public int CategoriaId { get; set; }
-        public Categoria Categoria { get; set; } = null!;
+        public Categoria? Categoria { get; set; } = null!;
+
+        // Relación con Imagen
+        public int? ImagenId { get; set; }
+        public Imagen? Imagen { get; set; }
 
         // Relaciones con detalles
-        public ICollection<IngresoDetalle> IngresoDetalles { get; set; } = new List<IngresoDetalle>();
-        public ICollection<SalidaDetalle> SalidaDetalles { get; set; } = new List<SalidaDetalle>();
+        public ICollection<IngresoDetalle>? IngresoDetalles { get; set; } = new List<IngresoDetalle>();
+        public ICollection<SalidaDetalle>? SalidaDetalles { get; set; } = new List<SalidaDetalle>();
     }
 }
