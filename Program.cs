@@ -8,10 +8,10 @@ using TP5_Servicios_API_REST.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Base de datos (MySQL con Pomelo)
+// 1. Base de datos (MySQL con versión fija para evitar crasheos de arranque en MonsterASP)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 30))));
 
 // 2. Autenticación JWT
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -57,18 +57,18 @@ builder.Services.AddScoped<ProveedorService>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ImagenService>();
 
-// 5. Controladores y OpenAPI NATIVO de .NET 10
+// 5. Controladores y OpenAPI NATIVO de .NET
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// 6. Pipeline HTTP
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference(); // Interfaz visual moderna e inmune a errores de Swashbuckle
-}
+// 6. Pipeline HTTP (Modificado para funcionar en producción de MonsterASP)
+app.MapOpenApi();
+app.MapScalarApiReference();
+
+// Redirecciona automáticamente la raíz (/) directamente hacia la interfaz de Scalar
+app.MapGet("/", () => Results.Redirect("/scalar/v1"));
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
