@@ -7,7 +7,6 @@ using TP5_Servicios_API_REST.Excepciones;
 using TP5_Servicios_API_REST.Models;
 using TP5_Servicios_API_REST.Services;
 
-
 namespace TP5_Servicios_API_REST.Controllers
 {
     [Route("api/[controller]")]
@@ -24,8 +23,64 @@ namespace TP5_Servicios_API_REST.Controllers
             _imagenService = imagenService;
         }
 
+        [HttpGet]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
+        public async Task<ActionResult<List<ProductoListadoResponse>>> ObtenerTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                return Ok(await _productoService.ObtenerTodos(page, pageSize));
+            }
+            catch (BaseDeDatosException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
+        public async Task<ActionResult<ProductoResponse>> ObtenerPorId(int id)
+        {
+            try
+            {
+                ProductoResponse dto = await _productoService.ObtenerPorId(id);
+                return Ok(dto);
+            }
+            catch (RecursoNoExisteException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (BaseDeDatosException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Roles.Administrador)]
+        public async Task<ActionResult<ProductoListadoResponse>> Crear(CrearProductoRequest dto)
+        {
+            try
+            {
+                ProductoListadoResponse producto = await _productoService.Crear(dto);
+                return CreatedAtAction(nameof(ObtenerPorId), new { id = producto.Id }, producto);
+            }
+            catch (DatosLlegaronErradosException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (RecursoExistenteException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (BaseDeDatosException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
         [HttpPost("{id}/imagen")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<ActionResult<ProductoImagenResponse>> SubirImagen(int id, IFormFile archivo)
         {
             try
@@ -57,64 +112,8 @@ namespace TP5_Servicios_API_REST.Controllers
             }
         }
 
-        [HttpGet]
-        // Lógica de paginado 
-        public async Task<ActionResult<List<ProductoListadoResponse>>> ObtenerTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
-        {
-            try
-            {
-                return Ok(await _productoService.ObtenerTodos(page, pageSize));
-            }
-            catch (BaseDeDatosException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-            }
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProductoResponse>> ObtenerPorId(int id)
-        {
-            try
-            {
-                // El servicio ya devuelve el DTO ProductoResponse listo
-                ProductoResponse dto = await _productoService.ObtenerPorId(id);
-                return Ok(dto);
-            }
-            catch (RecursoNoExisteException e)
-            {
-                return NotFound(e.Message);
-            }
-            catch (BaseDeDatosException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-            }
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrador")]
-        public async Task<ActionResult<ProductoListadoResponse>> Crear(CrearProductoRequest dto)
-        {
-            try
-            {
-                ProductoListadoResponse producto = await _productoService.Crear(dto);
-                return CreatedAtAction(nameof(ObtenerPorId), new { id = producto.Id }, producto);
-            }
-            catch (DatosLlegaronErradosException e)
-            {
-                return BadRequest(e.Message);
-            }
-            catch (RecursoExistenteException e)
-            {
-                return Conflict(e.Message);
-            }
-            catch (BaseDeDatosException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-            }
-        }
-
         [HttpPut("{id}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<IActionResult> Actualizar(int id, ActualizarProductoRequest dto)
         {
             try
@@ -137,7 +136,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<IActionResult> Eliminar(int id)
         {
             try

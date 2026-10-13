@@ -21,11 +21,11 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
         public async Task<ActionResult<List<ProveedorResponse>>> ObtenerTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                // Lógica de paginación
                 return Ok(await _proveedorService.ObtenerTodos(page, pageSize));
             }
             catch (BaseDeDatosException e)
@@ -35,6 +35,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
         public async Task<ActionResult<ProveedorResponse>> ObtenerPorId(int id)
         {
             try
@@ -53,7 +54,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<ActionResult<ProveedorResponse>> Crear(CrearProveedorRequest dto)
         {
             try
@@ -65,7 +66,7 @@ namespace API.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch (RecursoExistenteException e) // Ideal para validar que no se repita el CUIT/RUT del proveedor
+            catch (RecursoExistenteException e)
             {
                 return Conflict(e.Message);
             }
@@ -76,7 +77,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<IActionResult> Actualizar(int id, ActualizarProveedorRequest dto)
         {
             try
@@ -103,7 +104,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<IActionResult> Eliminar(int id)
         {
             try
@@ -123,7 +124,7 @@ namespace API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
-            catch (Exception e) // Por si intentan borrar un proveedor que ya tiene compras asociadas
+            catch (Exception e)
             {
                 return BadRequest($"No se puede eliminar el proveedor: {e.Message}");
             }

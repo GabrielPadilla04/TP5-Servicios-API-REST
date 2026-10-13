@@ -52,9 +52,8 @@ namespace TP5_Servicios_API_REST.Services
                 {
                     NombreCompleto = dto.NombreCompleto,
                     Email = dto.Email,
-                    // IMPORTANTE: Aquí deberías usar BCrypt para encriptar, por ahora lo pasamos directo
-                    PasswordHash = dto.Password,
-                    Rol = dto.Rol ?? "Vendedor", // Por defecto le asignamos Vendedor
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password), // Asegurate de usar el hash si ya lo implementaste
+                    Rol = Roles.Usuario, // <--- Aquí usamos la constante de roles segura por defecto
                     FechaCreacion = DateTime.UtcNow
                 };
 

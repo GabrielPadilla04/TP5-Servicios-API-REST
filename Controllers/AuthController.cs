@@ -35,7 +35,7 @@ namespace TP5_Servicios_API_REST.Controllers
                 NombreCompleto = dto.NombreCompleto,
                 Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Rol = dto.Rol,
+                Rol = Roles.Usuario, // <--- Forzamos la constante segura en lugar de dto.Rol
                 FechaCreacion = DateTime.UtcNow
             };
 
@@ -60,7 +60,6 @@ namespace TP5_Servicios_API_REST.Controllers
         {
             var jwtSettings = _configuration.GetSection("Jwt");
 
-            // Valor de respaldo si no encuentra la clave en appsettings.json
             string secretKey = jwtSettings["Key"] ?? "ClaveSecretaSuperSeguraTP5_2026!ConSuficienteLongitud12345";
             var key = Encoding.UTF8.GetBytes(secretKey);
 
@@ -69,7 +68,7 @@ namespace TP5_Servicios_API_REST.Controllers
                 new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
-                new Claim(ClaimTypes.Role, usuario.Rol ?? "Usuario")
+                new Claim(ClaimTypes.Role, usuario.Rol ?? Roles.Usuario) // <--- Usamos la constante como fallback
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

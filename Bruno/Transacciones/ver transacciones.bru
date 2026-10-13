@@ -1,0 +1,21 @@
+meta {
+  name: ver transacciones
+  type: http
+  seq: 10
+}
+
+get {
+  url: http://tp5serviciosapirest.runasp.net/api/Transacciones
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwic3ViIjoiMiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTc5MTkyNDQyMSwiZXhwIjoxNzkxOTUzMjIxLCJpYXQiOjE3OTE5MjQ0MjEsImlzcyI6IlRQNUFwaSIsImF1ZCI6IlRQNUNsaWVudHMifQ.p2ODLbDS3NqPyTcgdtjQ2HeahsBhQWYm5-Rd1nkW7O0
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

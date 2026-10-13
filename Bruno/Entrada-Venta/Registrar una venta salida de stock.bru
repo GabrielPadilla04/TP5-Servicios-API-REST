@@ -1,0 +1,35 @@
+meta {
+  name: Registrar una venta salida de stock
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://tp5serviciosapirest.runasp.net/api/Salidas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwic3ViIjoiMiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTc5MTkyNDQyMSwiZXhwIjoxNzkxOTUzMjIxLCJpYXQiOjE3OTE5MjQ0MjEsImlzcyI6IlRQNUFwaSIsImF1ZCI6IlRQNUNsaWVudHMifQ.p2ODLbDS3NqPyTcgdtjQ2HeahsBhQWYm5-Rd1nkW7O0
+}
+
+body:json {
+  {
+    "clienteId": 2,
+    "observaciones": "Venta de mostrador",
+    "detalles": [
+      {
+        "productoId": 2,
+        "cantidad": 3,
+        "precioVenta": 45000
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

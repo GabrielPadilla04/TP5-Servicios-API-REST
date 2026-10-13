@@ -1,0 +1,26 @@
+meta {
+  name: CreacionDeCuenta
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://tp5serviciosapirest.runasp.net/api/Auth/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nombreCompleto": "Gabriel Padilla",
+    "email": "admin@test.com",
+    "password": "AdminPassword123!",
+    "rol": "Administrador"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

@@ -1,0 +1,34 @@
+meta {
+  name: Registrar ingreso/stock
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://tp5serviciosapirest.runasp.net/api/Ingresos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwic3ViIjoiMiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTc5MTkyNDQyMSwiZXhwIjoxNzkxOTUzMjIxLCJpYXQiOjE3OTE5MjQ0MjEsImlzcyI6IlRQNUFwaSIsImF1ZCI6IlRQNUNsaWVudHMifQ.p2ODLbDS3NqPyTcgdtjQ2HeahsBhQWYm5-Rd1nkW7O0
+}
+
+body:json {
+  {
+    "proveedorId": 1,
+    "detalles": [
+      {
+        "productoId": 1,
+        "cantidad": 10,
+        "precioCosto": 1500.00
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}
