@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TP5_Servicios_API_REST.DTOs.Categoria.Request;
 using TP5_Servicios_API_REST.DTOs.Categoria.Response;
+using TP5_Servicios_API_REST.Models;
 
 namespace TP5_Servicios_API_REST.Controllers
 {
@@ -21,11 +22,11 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
         public async Task<ActionResult<List<CategoriaResponse>>> ObtenerTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                // Lógica de paginado 
                 return Ok(await _categoriaService.ObtenerTodos(page, pageSize));
             }
             catch (BaseDeDatosException e)
@@ -35,6 +36,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
         public async Task<ActionResult<CategoriaResponse>> ObtenerPorId(int id)
         {
             try
@@ -53,7 +55,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<ActionResult<CategoriaResponse>> Crear(CrearCategoriaRequest dto)
         {
             try
@@ -65,7 +67,7 @@ namespace TP5_Servicios_API_REST.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch (RecursoExistenteException e) // Por si validas que no haya dos categorías con el mismo nombre
+            catch (RecursoExistenteException e)
             {
                 return Conflict(e.Message);
             }
@@ -76,7 +78,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<IActionResult> Actualizar(int id, ActualizarCategoriaRequest dto)
         {
             try
@@ -103,12 +105,11 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<IActionResult> Eliminar(int id)
         {
             try
             {
-                // Generalmente se hace una baja lógica o se verifica que no tenga productos asociados antes de borrar
                 await _categoriaService.Eliminar(id);
                 return NoContent();
             }
@@ -124,7 +125,7 @@ namespace TP5_Servicios_API_REST.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
-            catch (Exception e) // Opcional: Atrapar error por restricción de llave foránea (si tiene productos)
+            catch (Exception e)
             {
                 return BadRequest($"No se puede eliminar la categoría: {e.Message}");
             }

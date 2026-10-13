@@ -1,0 +1,21 @@
+meta {
+  name: Listar Categoria
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://tp5serviciosapirest.runasp.net/api/Categorias
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwic3ViIjoiMiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTc5MDcyNTg5NSwiZXhwIjoxNzkwNzU0Njk1LCJpYXQiOjE3OTA3MjU4OTUsImlzcyI6IlRQNUFwaSIsImF1ZCI6IlRQNUNsaWVudHMifQ.TKi1r4PDq17UR9Vh2be5a-7WPGV1EF2EQ68t5IAEsSM
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

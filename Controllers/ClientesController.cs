@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TP5_Servicios_API_REST.DTOs.Cliente.Request;
 using TP5_Servicios_API_REST.DTOs.Cliente.Response;
+using TP5_Servicios_API_REST.Models;
 
 namespace TP5_Servicios_API_REST.Controllers
 {
@@ -21,11 +22,11 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
         public async Task<ActionResult<List<ClienteResponse>>> ObtenerTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                // Lógica de paginado
                 return Ok(await _clienteService.ObtenerTodos(page, pageSize));
             }
             catch (BaseDeDatosException e)
@@ -35,6 +36,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
         public async Task<ActionResult<ClienteResponse>> ObtenerPorId(int id)
         {
             try
@@ -53,7 +55,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrador")] 
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<ActionResult<ClienteResponse>> Crear(CrearClienteRequest dto)
         {
             try
@@ -65,7 +67,7 @@ namespace TP5_Servicios_API_REST.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch (RecursoExistenteException e) //para validar DNI o Correo duplicado
+            catch (RecursoExistenteException e)
             {
                 return Conflict(e.Message);
             }
@@ -76,7 +78,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<IActionResult> Actualizar(int id, ActualizarClienteRequest dto)
         {
             try
@@ -103,7 +105,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<IActionResult> Eliminar(int id)
         {
             try
@@ -123,7 +125,7 @@ namespace TP5_Servicios_API_REST.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
-            catch (Exception e) // Por si intentan borrar un cliente que ya tiene ventas asociadas
+            catch (Exception e)
             {
                 return BadRequest($"No se puede eliminar el cliente: {e.Message}");
             }

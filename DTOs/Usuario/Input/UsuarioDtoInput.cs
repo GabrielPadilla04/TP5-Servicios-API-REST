@@ -4,7 +4,6 @@ namespace TP5_Servicios_API_REST.DTOs.Usuario.Input
     {
         public string NombreCompleto { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty; // Viaja en texto plano y se encripta en el servicio/API
-        public string? Rol { get; set; } // Puede ser nulo y el sistema le asigna "Vendedor"
+        public string Password { get; set; } = string.Empty;
     }
 }

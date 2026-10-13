@@ -20,6 +20,7 @@ public class IngresosController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = Roles.Administrador)] // Exclusivo para Administradores
     public async Task<IActionResult> RegistrarIngreso([FromBody] RegistrarIngresoDto dto)
     {
         if (dto.Detalles == null || !dto.Detalles.Any())
@@ -63,7 +64,6 @@ public class IngresosController : ControllerBase
                 var subtotal = item.Cantidad * item.PrecioCosto;
                 totalIngreso += subtotal;
 
-                // Corregido: Usar .Detalles
                 ingreso.Detalles.Add(new IngresoDetalle
                 {
                     ProductoId = item.ProductoId,

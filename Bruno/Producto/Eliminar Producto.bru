@@ -1,0 +1,17 @@
+meta {
+  name: Eliminar Producto
+  type: http
+  seq: 4
+}
+
+delete {
+  url: http://tp5serviciosapirest.runasp.net/api/Productos/2
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

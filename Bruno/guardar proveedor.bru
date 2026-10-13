@@ -1,0 +1,29 @@
+meta {
+  name: guardar proveedor
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://tp5serviciosapirest.runasp.net/api/Proveedores
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwic3ViIjoiMiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTc5MDk3MzY4OCwiZXhwIjoxNzkxMDAyNDg4LCJpYXQiOjE3OTA5NzM2ODgsImlzcyI6IlRQNUFwaSIsImF1ZCI6IlRQNUNsaWVudHMifQ.X_C0I3qQf7SihjGPLe_snMYfWnWwDypW85kKfur-9ck
+}
+
+body:json {
+  {
+    "nombre": "Proveedor Central",
+    "contacto": "contacto@proveedor.com",
+    "telefono": "123456789"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

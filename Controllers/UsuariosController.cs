@@ -24,16 +24,15 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         // ----------------------------------------------------
-        // ENDPOINTS DE USUARIO COMÚN
+        // ENDPOINTS DE USUARIO COMÚN (Acceso propio o Admin)
         // ----------------------------------------------------
 
         [HttpGet]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<ActionResult<List<UsuarioDtoOutput>>> ObtenerTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                // UsuarioService.ObtenerlosATodos devuelve List<UsuarioDtoOutput> directamente
                 List<UsuarioDtoOutput> usuarios = await _usuarioService.ObtenerlosATodos(page, pageSize);
                 return Ok(usuarios);
             }
@@ -44,6 +43,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpDelete("dardebaja")]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
         public async Task<ActionResult> DarDeBaja()
         {
             try
@@ -74,6 +74,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpPut("actualizar")]
+        [Authorize(Roles = $"{Roles.Administrador},{Roles.Usuario}")]
         public async Task<ActionResult<UsuarioAuthDtoOutput>> Actualizar([FromBody] UsuarioDtoInput usuarioDtoInput)
         {
             try
@@ -108,11 +109,11 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         // ----------------------------------------------------
-        // ENDPOINTS DE ADMINISTRADOR
+        // ENDPOINTS EXCLUSIVOS DE ADMINISTRADOR
         // ----------------------------------------------------
 
         [HttpPost("convertirenadministrador/{id:int}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<ActionResult> ConvertirEnAdministrador(int id)
         {
             try
@@ -135,7 +136,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpPost("quitaradministrador/{id:int}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<ActionResult> QuitarAdministrador(int id)
         {
             try
@@ -158,7 +159,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpDelete("admin/dardebaja/{id:int}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<ActionResult> DarDeBajaAdmin(int id)
         {
             try
@@ -181,7 +182,7 @@ namespace TP5_Servicios_API_REST.Controllers
         }
 
         [HttpPut("admin/actualizar/{id:int}")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = Roles.Administrador)]
         public async Task<ActionResult> ActualizarAdmin(int id, [FromBody] UsuarioDtoInput usuarioDtoInput)
         {
             try

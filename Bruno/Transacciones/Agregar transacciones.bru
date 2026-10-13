@@ -1,0 +1,29 @@
+meta {
+  name: Agregar transacciones
+  type: http
+  seq: 11
+}
+
+post {
+  url: http://tp5serviciosapirest.runasp.net/api/Transacciones
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwic3ViIjoiMiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTc5MDk3Njg3MywiZXhwIjoxNzkxMDA1NjczLCJpYXQiOjE3OTA5NzY4NzMsImlzcyI6IlRQNUFwaSIsImF1ZCI6IlRQNUNsaWVudHMifQ.P1qTyU9CU5Ywm8oXV2TsclFaaiHXzYy3C6Gr8KFZBhY
+}
+
+body:json {
+  {
+    "tipo": "Ingreso",
+    "ingresoId": 7,
+    "salidaId": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

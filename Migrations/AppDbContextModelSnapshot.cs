@@ -303,13 +303,13 @@ namespace TP5_Servicios_API_REST.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("ProductoId")
+                    b.Property<int?>("IngresoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SalidaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Tipo")
@@ -321,7 +321,9 @@ namespace TP5_Servicios_API_REST.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductoId");
+                    b.HasIndex("IngresoId");
+
+                    b.HasIndex("SalidaId");
 
                     b.HasIndex("UsuarioId");
 
@@ -461,11 +463,15 @@ namespace TP5_Servicios_API_REST.Migrations
 
             modelBuilder.Entity("TP5_Servicios_API_REST.Models.Transaccion", b =>
                 {
-                    b.HasOne("TP5_Servicios_API_REST.Models.Producto", "Producto")
+                    b.HasOne("TP5_Servicios_API_REST.Models.Ingreso", "Ingreso")
                         .WithMany()
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IngresoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TP5_Servicios_API_REST.Models.Salida", "Salida")
+                        .WithMany()
+                        .HasForeignKey("SalidaId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TP5_Servicios_API_REST.Models.Usuario", "Usuario")
                         .WithMany()
@@ -473,7 +479,9 @@ namespace TP5_Servicios_API_REST.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Producto");
+                    b.Navigation("Ingreso");
+
+                    b.Navigation("Salida");
 
                     b.Navigation("Usuario");
                 });

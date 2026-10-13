@@ -20,6 +20,7 @@ public class SalidasController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = Roles.Administrador)] // Restringido únicamente a Administradores
     public async Task<IActionResult> RegistrarSalida([FromBody] RegistrarSalidaDto dto)
     {
         if (dto.Detalles == null || !dto.Detalles.Any())
@@ -70,7 +71,6 @@ public class SalidasController : ControllerBase
                 var subtotal = item.Cantidad * item.PrecioVenta;
                 totalSalida += subtotal;
 
-                // Corregido: Usar .Detalles
                 salida.Detalles.Add(new SalidaDetalle
                 {
                     ProductoId = item.ProductoId,
